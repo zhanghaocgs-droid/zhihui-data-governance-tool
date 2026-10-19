@@ -327,5 +327,5 @@ rules:
     stage: 资料汇交
     file_type: 资料目录
     categories: [GL]
-    keywords: [资料文件目录, 资料清单]
+    keywords: [资料文件目录, 资料清单, 校验码]
     weight: 0.90
