@@ -159,7 +159,10 @@ class Engine:
             self.db.log("盘点", f"{dh} 扫描完成：{sc.file_count} 个文件，时期 {pr.period or '待判别'}，对账 {status}",
                         dh=dh, operator=self.operator)
             n += 1
-        # 清单中有、目录中没有的档
+        # 清单中有、目录中没有的档。只有本次扫描到清单内档号时才判定，避免扫描样例或局部目录时满屏误报
+        matched = [k for k in seen if k in hidx]
+        if not matched:
+            return n
         for key, row in hidx.items():
             if key in seen:
                 continue
