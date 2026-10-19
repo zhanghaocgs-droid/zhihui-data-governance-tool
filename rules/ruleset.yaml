@@ -1,0 +1,52 @@
+# 规则集总入口。任何规则文件修改后都要提升 version，并在 changelog 记一笔。
+version: "R1.0.0"
+date: "2026-10-19"
+files:
+  - periods.yaml
+  - stages.yaml
+  - classify.yaml
+  - naming.yaml
+  - excel_header.yaml
+  - secrecy.yaml
+  - validation.yaml
+
+params:
+  # 分类置信度达到该值才直接采用，否则进人工复核
+  accept_threshold: 0.70
+  # 最高分与次高分差距小于该值视为冲突，进人工复核
+  conflict_margin: 0.10
+  # 时期识别得分阈值
+  period_threshold: 0.60
+  # 成果组成部分（附图、附表、数据库等）的去向：associate 只登记关联保存；archive 随成果报告落入成果评审
+  attachments_mode: associate
+  # 未命中阶段规则时各类别的处理：review 进人工复核；associate 按成果组成部分关联保存
+  unmatched_action:
+    Z: review
+    S: review
+    GL: review
+    J: associate
+    Q: associate
+    default: associate
+  # 只登记不分类的类别代码，按成果组成部分处理
+  component_categories: [T, B, K, R, M]
+  # 同一目录下未被目录引用的文件数超过该值时，按目录登记一行
+  dir_register_threshold: 50
+  # Word 转 PDF 转换器优先级，可选 word、wps、libreoffice；留空表示不转换
+  converters: [word, wps, libreoffice]
+  libreoffice_path: ""
+  # 是否在存档 PDF 存在时直接使用存档 PDF
+  prefer_archive_pdf: true
+  # 项目名称相似度达到该值判为疑似匹配
+  project_fuzzy_threshold: 0.85
+  # GRP 项目对照表导入时各字段可接受的列名，格式待开发单位提供
+  project_columns:
+    uuid: [项目UUID, UUID, uuid, 项目ID, 项目编码UUID]
+    name: [项目名称, 名称]
+    code: [项目编号, 编号, 项目代码]
+    level: [项目层级, 层级, 项目级别]
+    year: [年度, 项目年度, 起始年度]
+
+changelog:
+  - version: "R1.0.0"
+    date: "2026-10-19"
+    note: "V1.0 初版，适配现行报盘 XML 型和登记表型。"

@@ -1,0 +1,34 @@
+# 四段式命名规则。{期间标识}-{项目名称}-{文件类型}-{版本名称}.{扩展名}
+version: "N1.0.0"
+
+project_name:
+  # 项目名称来源优先级：project 为 GRP 项目对照表，其余为案卷字段
+  sources: [project.name, case.XMMC, case.BGTM, case.TM]
+  # 先替换后删除
+  replace:
+    ":": "∶"
+    "•": "·"
+    "・": "·"
+  # 需要删除的字符，包括连字符、空格、括号和全角标点
+  remove: "-－—–_ 　\t()（）[]［］【】〔〕{}｛｝<>《》〈〉,，.。、;；:：!！?？\"“”'‘’…/\\|*"
+  max_chars_warn: 30
+
+# 期间标识提取。年度性阶段按顺序尝试，命中即用；取不到进人工复核，不用文件时间硬填
+period_sources:
+  annual:
+    # 文号中的年份，如 [2005]、〔2012〕
+    - {type: regex, field: title, pattern: "[\\[［〔(（](\\d{4})[\\]］〕)）]"}
+    # 题名中的 YYYY年
+    - {type: regex, field: title, pattern: "((?:19|20)\\d{2})年"}
+    # 题名中的 YYYY年度
+    - {type: regex, field: title, pattern: "((?:19|20)\\d{2})年度"}
+  monthly:
+    - {type: regex2, field: title, pattern: "((?:19|20)\\d{2})年(\\d{1,2})月"}
+
+# 允许直接落库的扩展名，须与第六章正则一致
+allowed_ext: [pdf, doc, docx, xls, xlsx, jpg, jpeg, png, zip]
+# 需要转换为 PDF 的扩展名
+convert_to_pdf: [doc, docx, rtf, wps]
+# 文件名与全路径长度上限
+max_name_len: 120
+max_path_len: 255

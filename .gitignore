@@ -1,0 +1,44 @@
+# 样例数据与移交资料，绝不入库
+数据示例/
+samples/
+*.ml
+*.ML
+*.xml
+!rules/**/*.xml
+# 成果区、工作区、数据库
+/workspace/
+/成果区/
+/output/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+# 交接清单、项目对照表等业务表格
+*.xlsx
+*.xls
+!tests/fixtures/*.xlsx
+# 截图另行发送，不入库
+screenshots/
+# 密钥与环境
+.env
+*.key
+*.pem
+# Python 缓存与测试
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+# 打包产物
+/build/
+/dist/
+*.spec.bak
+*.egg-info/
+# 编辑器
+.vscode/
+.idea/
+*.swp
+Thumbs.db

@@ -1,0 +1,37 @@
+# 结构化目录 Excel 表头。甲方正式表头下发后在此增删列，不改代码。
+# 每列 sources 按优先级取值，取值来源依次为全国馆 XML、ML、汇总表与档案文件目录、文件名。
+# 可用来源前缀：case. 案卷字段；doc. 文献字段；map. 治理结果；project. 项目对照表；archive. 盘点台账
+version: "E1.0.0"
+missing_mark: "【缺失】"
+sheet_name: 结构化目录
+
+columns:
+  - {name: 档号, sources: [archive.dh]}
+  - {name: 项目UUID, sources: [map.project_uuid]}
+  - {name: 项目层级, sources: [map.project_level]}
+  - {name: 项目名称, sources: [project.name, case.XMMC, case.BGTM]}
+  - {name: 项目编号, sources: [project.code, case.XMBH]}
+  - {name: 任务书编号, sources: [case.XMRWSBH]}
+  - {name: 资料题名, sources: [case.TM, case.BGTM]}
+  - {name: 文件题名, sources: [doc.title]}
+  - {name: 类别代码, sources: [doc.category]}
+  - {name: 册号, sources: [doc.volume]}
+  - {name: 件号, sources: [doc.item]}
+  - {name: 阶段, sources: [map.stage]}
+  - {name: 子目录, sources: [map.subdir]}
+  - {name: 文件类型, sources: [map.file_type]}
+  - {name: 期间标识, sources: [map.period_id]}
+  - {name: 版本, sources: [map.version]}
+  - {name: 落库文件名, sources: [map.target_name]}
+  - {name: 落库相对路径, sources: [map.target_rel]}
+  - {name: 密级, sources: [doc.secrecy, case.MJ]}
+  - {name: 形成单位, sources: [case.XMFZDW, case.XCDW, case.HJDWMC]}
+  - {name: 形成时间, sources: [case.XCSJ, case.XCRQ]}
+  - {name: 汇交时间, sources: [case.HJSJ]}
+  - {name: 评审机构, sources: [case.PSJG]}
+  - {name: 评审时间, sources: [case.PSSJ]}
+  - {name: 项目起始时间, sources: [case.XMQSSJ]}
+  - {name: 项目终止时间, sources: [case.XMZZSJ]}
+  - {name: 资料类别, sources: [case.ZLLB]}
+  - {name: 工作程度, sources: [case.GZCD]}
+  - {name: 资金来源, sources: [case.ZJLY]}

@@ -1,0 +1,12 @@
+# 涉密识别与三套成果拆分口径。目录级涉密口径待甲方提供。
+version: "M1.0.0"
+# 视为涉密的密级取值，按包含匹配
+secret_words: [绝密, 机密, 秘密, 涉密]
+# 明确不涉密的取值，优先于 secret_words 判断
+public_words: [不涉密, 非涉密, 公开, 内部, 无]
+# 目录级涉密关键词，命中项目名称或文件题名即标记涉密，进入人工复核确认
+catalog_keywords: []
+# 分套口径：any 档级或文件级任一涉密即进涉密套；archive 只看档级；file 只看文件级
+scope: any
+# 密级为空时的处理：secret 按涉密处理，宁严勿宽；public 按非涉密处理
+empty_as: secret

@@ -1,0 +1,122 @@
+# 九个项目阶段、固定子目录、期间标识类型与文件类型受控词表。
+# 依据《历史存档资料落库目录结构与文件命名说明》v3，资料汇交为甲方新增阶段，词表暂定。
+# period_type：annual 年度性 YYYY；monthly 月报 YYYY年M月；once 一次性无期间标识
+version: "S1.0.0"
+
+levels:
+  二级项目: {stage4: 实施方案}
+  三级项目: {stage4: 年度设计}
+
+# 版本受控词
+version_words:
+  text: [初稿, 送审稿, 初审, 终审, 报批稿, 定稿, 备案稿]
+  numeric_pattern: "v\\d+"
+# 默认版本体系 text 或 numeric。同一项目只用一种体系。
+# 下列词表中每个文件类型后的取值为文字型体系的默认版本词；数值型体系一律从 v1 起编号。
+# 历史存档资料均为归档正本，默认取 终审 或 定稿，备案类取 备案稿。
+default_version_system: text
+
+stages:
+  - name: 立项论证
+    order: 1
+    period_type: once
+    file_types:
+      立项建议书: 初稿
+      立项申报书: 报批稿
+      立项论证报告: 终审
+      专家论证意见: 定稿
+      立项批复: 定稿
+
+  - name: 续作评估
+    order: 2
+    period_type: annual
+    file_types:
+      续作评估申请: 定稿
+      续作评估报告: 终审
+      续作评估意见: 定稿
+      续作批复: 定稿
+
+  - name: 任务书
+    order: 3
+    period_type: annual
+    file_types:
+      任务书: 终审
+      任务书评审意见: 定稿
+      任务书批复: 定稿
+
+  # 第 4 阶段按项目层级取名，词表按层级分开，二者不得混用
+  - name: 实施方案
+    order: 4
+    level: 二级项目
+    period_type: annual
+    file_types:
+      实施方案: 终审
+      实施方案评审意见: 定稿
+      实施方案批复: 定稿
+
+  - name: 年度设计
+    order: 4
+    level: 三级项目
+    period_type: annual
+    file_types:
+      年度设计书: 终审
+      年度设计评审意见: 定稿
+      年度设计批复: 定稿
+
+  - name: 质量监督
+    order: 5
+    period_type: monthly
+    file_types:
+      质量监督月报: 定稿
+      质量检查记录表: 定稿
+      质量问题整改通知: 定稿
+      整改情况回复: 定稿
+
+  - name: 年度考核
+    order: 6
+    period_type: annual
+    file_types:
+      年度考核自评报告: 定稿
+      年度考核报告: 终审
+      年度考核评分表: 定稿
+      年度考核结论: 定稿
+
+  - name: 野外验收
+    order: 7
+    period_type: once
+    subdirs:
+      野外验收备案:
+        野外验收备案表: 备案稿
+        野外验收申请: 定稿
+      野外验收评审:
+        野外验收报告: 终审
+        野外验收专家意见: 定稿
+        野外验收结论: 定稿
+
+  - name: 成果评审
+    order: 8
+    period_type: once
+    subdirs:
+      信息化评审:
+        信息化评审申请: 定稿
+        信息化评审意见: 定稿
+        信息化评审结论: 定稿
+      成果评审:
+        成果报告: 终审
+        成果评审意见: 定稿
+        成果评审结论: 定稿
+
+  # 甲方新增，词表待开发单位补充
+  - name: 资料汇交
+    order: 9
+    period_type: once
+    file_types:
+      汇交汇总表: 定稿
+      资料目录: 定稿
+      档案文件目录: 定稿
+      目录著录表: 定稿
+      实物资料目录清单: 定稿
+      电子文件登记表: 定稿
+      涉密情况报告表: 定稿
+      载体外标签: 定稿
+      汇交凭证: 定稿

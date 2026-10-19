@@ -1,0 +1,331 @@
+# 阶段分类规则。程序代码中不写业务关键词，全部在此配置。
+# 字段说明：
+#   id          规则编号，写入映射表判定依据
+#   stage       阶段；第 4 阶段写 第4阶段，按项目层级落为 实施方案 或 年度设计
+#   subdir      固定子目录，仅野外验收、成果评审使用
+#   file_type   文件类型，须在 stages.yaml 词表内；第 4 阶段写成 {二级项目: x, 三级项目: y}
+#   categories  类别代码约束，Z S T B J K R M Q 为成果九类，GL 为管理性文件
+#   keywords    题名关键词，命中任一即命中
+#   exclude     排除词，命中任一则该规则作废
+#   weight      命中得分，0 至 1
+# 类别代码：Z 正文 S 审批 T 附图 B 附表 J 附件 K 数据库 R 软件 M 多媒体 Q 其他 GL 管理性文件
+version: "C1.0.0"
+
+common_exclude_stage4: &ex_stage4 [评审, 审查, 批复, 审批, 意见]
+
+rules:
+  # ---------- 成果评审 ----------
+  - id: CG-BG-01
+    stage: 成果评审
+    subdir: 成果评审
+    file_type: 成果报告
+    categories: [Z]
+    keywords: [报告, 说明书, 总结]
+    exclude: [简报, 月报, 自评报告, 野外验收报告, 续作评估报告, 立项论证报告, 年度考核报告]
+    weight: 0.90
+  - id: CG-BG-02
+    stage: 成果评审
+    subdir: 成果评审
+    file_type: 成果报告
+    categories: [Z]
+    keywords: ["*"]
+    weight: 0.75
+  - id: CG-YJ-01
+    stage: 成果评审
+    subdir: 成果评审
+    file_type: 成果评审意见
+    categories: [S, Q, J]
+    keywords: [评审意见, 评审备案证明, 评审备案, 评审决议, 认定书, 成果报告评审]
+    exclude: [设计, 方案, 野外验收, 任务书, 立项, 续作, 年度考核, 信息化, 数据库评审]
+    weight: 0.90
+  - id: CG-YJ-02
+    stage: 成果评审
+    subdir: 成果评审
+    file_type: 成果评审意见
+    categories: [S]
+    keywords: [审查意见, 审字]
+    exclude: [设计, 方案, 野外验收, 任务书, 立项, 续作, 年度考核, 信息化]
+    weight: 0.60
+  - id: CG-JL-01
+    stage: 成果评审
+    subdir: 成果评审
+    file_type: 成果评审结论
+    categories: [S, Q, J]
+    keywords: [评审结论, 成果评审结果]
+    exclude: [野外验收, 信息化]
+    weight: 0.90
+  - id: XXH-YJ-01
+    stage: 成果评审
+    subdir: 信息化评审
+    file_type: 信息化评审意见
+    categories: [S, Q, J]
+    keywords: [信息化评审意见, 数据库评审意见, 信息化成果评审]
+    weight: 0.90
+  - id: XXH-JL-01
+    stage: 成果评审
+    subdir: 信息化评审
+    file_type: 信息化评审结论
+    categories: [S, Q, J]
+    keywords: [信息化评审结论]
+    weight: 0.92
+  - id: XXH-SQ-01
+    stage: 成果评审
+    subdir: 信息化评审
+    file_type: 信息化评审申请
+    categories: [S, Q, J]
+    keywords: [信息化评审申请]
+    weight: 0.92
+
+  # ---------- 野外验收 ----------
+  - id: YW-BA-01
+    stage: 野外验收
+    subdir: 野外验收备案
+    file_type: 野外验收备案表
+    categories: [S, Q, J, GL]
+    keywords: [野外验收备案]
+    weight: 0.92
+  - id: YW-SQ-01
+    stage: 野外验收
+    subdir: 野外验收备案
+    file_type: 野外验收申请
+    categories: [S, Q, J]
+    keywords: [野外验收申请]
+    weight: 0.92
+  - id: YW-JL-01
+    stage: 野外验收
+    subdir: 野外验收评审
+    file_type: 野外验收结论
+    categories: [S, Q, J]
+    keywords: [野外验收意见, 野外验收结论, 野外工作验收意见, 野外验收评审意见]
+    exclude: [专家意见]
+    weight: 0.90
+  - id: YW-ZJ-01
+    stage: 野外验收
+    subdir: 野外验收评审
+    file_type: 野外验收专家意见
+    categories: [S, Q, J]
+    keywords: [野外验收专家意见]
+    weight: 0.92
+  - id: YW-BG-01
+    stage: 野外验收
+    subdir: 野外验收评审
+    file_type: 野外验收报告
+    categories: [Q, J, Z]
+    keywords: [野外验收报告, 野外工作总结]
+    weight: 0.88
+
+  # ---------- 第 4 阶段 实施方案 / 年度设计 ----------
+  - id: SJ-PF-01
+    stage: 第4阶段
+    file_type: {二级项目: 实施方案批复, 三级项目: 年度设计批复}
+    categories: [S, Q, J]
+    keywords: [设计批复, 设计审批, 方案批复, 设计的批复, 方案的批复]
+    weight: 0.90
+  - id: SJ-YJ-01
+    stage: 第4阶段
+    file_type: {二级项目: 实施方案评审意见, 三级项目: 年度设计评审意见}
+    categories: [S, Q, J]
+    keywords: [设计审查意见, 设计评审意见, 方案评审意见, 方案审查意见, 设计审查]
+    exclude: [批复]
+    weight: 0.85
+  - id: SJ-WB-01
+    stage: 第4阶段
+    file_type: {二级项目: 实施方案, 三级项目: 年度设计书}
+    categories: [Q, J]
+    keywords: [工作方案, 实施方案, 设计书, 总体设计, 年度设计]
+    exclude: *ex_stage4
+    weight: 0.80
+
+  # ---------- 任务书 ----------
+  - id: RW-PF-01
+    stage: 任务书
+    file_type: 任务书批复
+    categories: [S, Q, J]
+    keywords: [任务书批复, 任务书的批复]
+    weight: 0.92
+  - id: RW-YJ-01
+    stage: 任务书
+    file_type: 任务书评审意见
+    categories: [S, Q, J]
+    keywords: [任务书评审, 任务书审查]
+    weight: 0.90
+  - id: RW-WB-01
+    stage: 任务书
+    file_type: 任务书
+    categories: [S, Q, J]
+    keywords: [任务书, 任务下达, 下达任务]
+    exclude: [评审, 审查, 批复]
+    weight: 0.85
+  - id: RW-WT-01
+    stage: 任务书
+    file_type: 任务书
+    categories: [S, Q, J]
+    keywords: [委托]
+    weight: 0.50
+
+  # ---------- 立项论证 ----------
+  - id: LX-PF-01
+    stage: 立项论证
+    file_type: 立项批复
+    categories: [S, Q, J]
+    keywords: [立项批复, 立项的批复]
+    weight: 0.92
+  - id: LX-BG-01
+    stage: 立项论证
+    file_type: 立项论证报告
+    categories: [Q, J]
+    keywords: [立项论证报告, 可行性论证报告]
+    weight: 0.90
+  - id: LX-YJ-01
+    stage: 立项论证
+    file_type: 专家论证意见
+    categories: [S, Q, J]
+    keywords: [论证意见]
+    exclude: [续作]
+    weight: 0.85
+  - id: LX-SB-01
+    stage: 立项论证
+    file_type: 立项申报书
+    categories: [Q, J]
+    keywords: [立项申报, 项目申报书]
+    weight: 0.88
+  - id: LX-JY-01
+    stage: 立项论证
+    file_type: 立项建议书
+    categories: [Q, J]
+    keywords: [立项建议]
+    weight: 0.88
+
+  # ---------- 续作评估 ----------
+  - id: XZ-PF-01
+    stage: 续作评估
+    file_type: 续作批复
+    categories: [S, Q, J]
+    keywords: [续作批复]
+    weight: 0.92
+  - id: XZ-YJ-01
+    stage: 续作评估
+    file_type: 续作评估意见
+    categories: [S, Q, J]
+    keywords: [续作评估意见]
+    weight: 0.92
+  - id: XZ-BG-01
+    stage: 续作评估
+    file_type: 续作评估报告
+    categories: [Q, J]
+    keywords: [续作评估报告]
+    weight: 0.90
+  - id: XZ-SQ-01
+    stage: 续作评估
+    file_type: 续作评估申请
+    categories: [Q, J]
+    keywords: [续作评估申请, 续作申请]
+    weight: 0.90
+
+  # ---------- 年度考核 ----------
+  - id: KH-JL-01
+    stage: 年度考核
+    file_type: 年度考核结论
+    categories: [S, Q, J]
+    keywords: [年度考核结论, 考核结论]
+    weight: 0.92
+  - id: KH-BG-01
+    stage: 年度考核
+    file_type: 年度考核报告
+    categories: [Q, J]
+    keywords: [年度考核报告]
+    weight: 0.90
+  - id: KH-ZP-01
+    stage: 年度考核
+    file_type: 年度考核自评报告
+    categories: [Q, J]
+    keywords: [自评报告]
+    weight: 0.88
+  - id: KH-PF-01
+    stage: 年度考核
+    file_type: 年度考核评分表
+    categories: [Q, J, B]
+    keywords: [考核评分表]
+    weight: 0.90
+
+  # ---------- 质量监督 ----------
+  - id: ZL-YB-01
+    stage: 质量监督
+    file_type: 质量监督月报
+    categories: [Q, J]
+    keywords: [质量监督月报, 质量监督报告]
+    weight: 0.90
+  - id: ZL-JC-01
+    stage: 质量监督
+    file_type: 质量检查记录表
+    categories: [Q, J, B]
+    keywords: [质量检查记录]
+    weight: 0.90
+  - id: ZL-TZ-01
+    stage: 质量监督
+    file_type: 质量问题整改通知
+    categories: [S, Q, J]
+    keywords: [整改通知]
+    weight: 0.90
+  - id: ZL-HF-01
+    stage: 质量监督
+    file_type: 整改情况回复
+    categories: [Q, J]
+    keywords: [整改情况]
+    weight: 0.88
+
+  # ---------- 资料汇交 ----------
+  - id: HJ-HZ-01
+    stage: 资料汇交
+    file_type: 汇交汇总表
+    categories: [GL, Q, J]
+    keywords: [汇交汇总表]
+    weight: 0.95
+  - id: HJ-DA-01
+    stage: 资料汇交
+    file_type: 档案文件目录
+    categories: [GL]
+    keywords: [档案文件目录]
+    weight: 0.95
+  - id: HJ-ZL-01
+    stage: 资料汇交
+    file_type: 目录著录表
+    categories: [GL]
+    keywords: [著录表]
+    weight: 0.95
+  - id: HJ-SW-01
+    stage: 资料汇交
+    file_type: 实物资料目录清单
+    categories: [GL]
+    keywords: [实物地质资料目录, 实物资料目录]
+    weight: 0.95
+  - id: HJ-DJ-01
+    stage: 资料汇交
+    file_type: 电子文件登记表
+    categories: [GL]
+    keywords: [电子文件登记表]
+    weight: 0.95
+  - id: HJ-SM-01
+    stage: 资料汇交
+    file_type: 涉密情况报告表
+    categories: [GL]
+    keywords: [涉密情况报告表, 涉密情况登记表]
+    weight: 0.95
+  - id: HJ-BQ-01
+    stage: 资料汇交
+    file_type: 载体外标签
+    categories: [GL]
+    keywords: [载体外标签]
+    weight: 0.95
+  - id: HJ-PZ-01
+    stage: 资料汇交
+    file_type: 汇交凭证
+    categories: [GL, Q, J]
+    keywords: [汇交凭证, 汇交证明, 接收凭证]
+    weight: 0.95
+  - id: HJ-ML-01
+    stage: 资料汇交
+    file_type: 资料目录
+    categories: [GL]
+    keywords: [资料文件目录, 资料清单]
+    weight: 0.90

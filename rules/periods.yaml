@@ -1,0 +1,60 @@
+# 时期识别特征。每个形态列出若干特征及权重，命中特征权重之和为得分。
+# required 为 true 的特征未命中时该形态直接得零分。
+# 特征类型：
+#   dir      档号文件夹下存在某相对目录（大小写不敏感）
+#   file     存在某相对文件，支持 * 通配
+#   xml_node 指定 XML 文件中存在某节点
+#   no_dir   不存在某目录
+version: "P1.0.0"
+
+periods:
+  - code: xianxing_xml
+    period: 现行
+    label: 现行报盘（XML型，Edmaker2017）
+    parser: xianxing_xml
+    supported: true
+    features:
+      - {type: dir, path: 管理性文件, weight: 0.3, required: true}
+      - {type: file, path: 管理性文件/地质资料文件目录.xml, weight: 0.3, required: true}
+      - {type: xml_node, path: 管理性文件/地质资料文件目录.xml, node: SysVersion, weight: 0.4}
+
+  - code: xianxing_djb
+    period: 现行
+    label: 现行报盘（登记表型）
+    parser: xianxing_djb
+    supported: true
+    features:
+      - {type: dir, path: 存档电子文件, weight: 0.3, required: true}
+      - {type: dir, path: 源电子文件, weight: 0.2}
+      - {type: file, path: 源电子文件/电子文件登记表.htm*, weight: 0.3}
+      - {type: file, path: 存档电子文件/电子文件登记表.pdf, weight: 0.2}
+      - {type: no_dir, path: 管理性文件, weight: 0.0, required: true}
+
+  - code: jinqi
+    period: 近期
+    label: 近期报盘（Edmaker2014）
+    parser: jinqi
+    supported: false
+    features:
+      - {type: file, path: 地质资料文件目录.xml, weight: 0.4, required: true}
+      - {type: dir, path: 成果资料存档电子文件, weight: 0.3}
+      - {type: dir, path: 成果资料源电子文件, weight: 0.2}
+      - {type: file, path: 成果和原始地质资料清单.*, weight: 0.1}
+
+  - code: qingqian
+    period: 清欠
+    label: 清欠期补交资料
+    parser: qingqian
+    supported: false
+    # V3.0 补充：按汇交时间、补交标识识别，现阶段无特征
+    features: []
+
+  - code: zaoqi
+    period: 早期
+    label: 早期图文标准（ML）
+    parser: zaoqi
+    supported: false
+    features:
+      - {type: file, path: SUB_DIR.ML, weight: 0.6, required: true}
+      - {type: no_dir, path: 存档电子文件, weight: 0.2}
+      - {type: no_dir, path: 管理性文件, weight: 0.2}

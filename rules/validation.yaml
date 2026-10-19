@@ -1,0 +1,21 @@
+# 落库说明第六章校验规则。资料汇交为新增阶段，已加入目录正则，按一次性规则校验文件名。
+version: "V1.0.0"
+
+uuid_pattern: "[0-9a-f]{32}"
+
+dir_patterns:
+  二级项目: "^/二级项目/{UUID}/(立项论证|续作评估|任务书|实施方案|质量监督|年度考核|野外验收/(野外验收备案|野外验收评审)|成果评审/(信息化评审|成果评审)|资料汇交)$"
+  三级项目: "^/三级项目/{UUID}/(立项论证|续作评估|任务书|年度设计|质量监督|年度考核|野外验收/(野外验收备案|野外验收评审)|成果评审/(信息化评审|成果评审)|资料汇交)$"
+
+name_patterns:
+  annual: "^\\d{4}-[^-]+-[^-]+-(v\\d+|初稿|送审稿|初审|终审|报批稿|定稿|备案稿)\\.(pdf|docx?|xlsx?|jpe?g|png|zip)$"
+  monthly: "^\\d{4}年\\d{1,2}月-[^-]+-[^-]+-(v\\d+|初稿|送审稿|初审|终审|报批稿|定稿|备案稿)\\.(pdf|docx?|xlsx?|jpe?g|png|zip)$"
+  once: "^[^-]+-[^-]+-(v\\d+|初稿|送审稿|初审|终审|报批稿|定稿|备案稿)\\.(pdf|docx?|xlsx?|jpe?g|png|zip)$"
+
+checks:
+  dir_regex: true
+  name_regex: true
+  vocabulary: true
+  version_continuity: true
+  uniqueness: true
+  length: true
