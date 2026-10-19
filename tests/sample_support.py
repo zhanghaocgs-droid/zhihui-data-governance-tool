@@ -9,7 +9,10 @@ from pathlib import Path
 from openpyxl import Workbook
 
 REPO = Path(__file__).resolve().parents[1]
-DEFAULT_SAMPLE_ROOT = REPO.parent / "数据治理项目实施" / "数据示例" / "数据示例"
+# 样例目录曾有一层同名嵌套，两种位置都兼容
+_SAMPLE_CANDIDATES = [REPO.parent / "数据治理项目实施" / "数据示例" / "数据示例",
+                      REPO.parent / "数据治理项目实施" / "数据示例"]
+DEFAULT_SAMPLE_ROOT = next((p for p in _SAMPLE_CANDIDATES if (p / "Edmaker2017").exists()), _SAMPLE_CANDIDATES[-1])
 
 # 样例档在测试中假定的项目层级
 SAMPLE_LEVELS = {"Edmaker2017": "二级项目", "dzwd001": "二级项目", "6933": "三级项目"}
