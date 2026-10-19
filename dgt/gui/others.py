@@ -164,7 +164,7 @@ class ExportPage(QWidget):
 
 
 class SettingsPage(QWidget):
-    def __init__(self, engine, operator_cb):
+    def __init__(self, engine, operator_cb, setup_cb=None):
         super().__init__()
         self.setObjectName("page")
         self.engine = engine
@@ -177,12 +177,18 @@ class SettingsPage(QWidget):
         fl.addRow("规则版本", QLabel(engine.rule_tag))
         fl.addRow("工作区", QLabel(str(engine.ws)))
         fl.addRow("成果区", QLabel(str(engine.out_root)))
-        fl.addRow("数据目录（只读）", QLabel("；".join(loads(engine.db.get_meta("data_roots"), [])) or "未设置"))
+        roots = QLabel("\n".join(loads(engine.db.get_meta("data_roots"), [])) or "未设置")
+        roots.setWordWrap(True)
+        fl.addRow("数据目录（只读）", roots)
         avail = engine.converter.available()
         fl.addRow("Word 转 PDF", QLabel("、".join(avail) if avail else "无可用转换器，Word 文件将进入待处理"))
         self.ed_op = QLineEdit(engine.operator)
         self.ed_op.editingFinished.connect(lambda: operator_cb(self.ed_op.text().strip()))
         fl.addRow("当前操作人", self.ed_op)
+        if setup_cb:
+            b = QPushButton("切换工作区…")
+            b.clicked.connect(setup_cb)
+            fl.addRow("", b)
         lay.addWidget(g)
         g2 = QGroupBox("作业日志（最近 500 条）")
         v = QVBoxLayout(g2)
