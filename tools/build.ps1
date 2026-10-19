@@ -17,4 +17,5 @@ python -m PyInstaller --noconfirm --clean --windowed --name $name --workpath $wo
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 # 规则配置放在 exe 旁边，便于查看和调整
 Copy-Item -Recurse -Force rules "dist\$name\rules"
-Copy-Item -Force README.md "dist\$name\使用说明.md"
+Copy-Item -Force docs\操作说明.md "dist\$name\操作说明.md"
+Remove-Item -Force -ErrorAction SilentlyContinue "dist\$name\使用说明.md"
